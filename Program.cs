@@ -30,7 +30,6 @@ do
 
 async Task ReceiveFromQueue()
 {
-    Console.WriteLine("Starting receiving messages from queue...");
     const string ServiceBusConnectionString = "Endpoint=sb://sb-finproducts-ec2-dev.servicebus.windows.net/;SharedAccessKeyName=default;SharedAccessKey=BN2D1vgOTD5jgKcjyqDx6eFzEOleKkwwu+ASbErEkGM=";
     const string QueueName = "commands-marcello";
     IQueueClient queueClient;
@@ -40,7 +39,8 @@ async Task ReceiveFromQueue()
         PrefetchCount = 10
     };
 
-    Console.WriteLine("Connected to queue client successfully");
+    Console.WriteLine("Connected to queue client successfully.");
+    Console.WriteLine("Starting receiving messages from subscription...");
 
     queueClient.RegisterSessionHandler(ProcessMessagesAsync, new SessionHandlerOptions(ExceptionReceivedHandler)
     {
@@ -48,6 +48,9 @@ async Task ReceiveFromQueue()
         MaxConcurrentSessions = 10,
         MessageWaitTimeout = TimeSpan.FromMilliseconds(100)
     });
+
+    Console.WriteLine("Press any key to exit.");
+    Console.ReadKey();
 
     await queueClient.CloseAsync();
 }
